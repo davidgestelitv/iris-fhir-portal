@@ -6,6 +6,7 @@ ARG IMAGE=intersystemsdc/irishealth-community:2020.3.0.200.0-zpm
 #Replaced with below image to fix Error: Invalid Community Edition license
 ARG IMAGE=intersystemsdc/irishealth-community:2021.1.0.215.3-zpm
 ARG IMAGE=intersystemsdc/irishealth-community
+ARG IMAGE=containers.intersystems.com/intersystems/irishealth:2023.3
 FROM $IMAGE
 
 USER root
@@ -14,10 +15,10 @@ WORKDIR /opt/irisapp
 RUN chown ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /opt/irisapp
 USER ${ISC_PACKAGE_MGRUSER}
 
-COPY  src src
+COPY src src
 COPY data/fhir fhirdata
 COPY iris.script /tmp/iris.script
-#COPY fhirUI /usr/irissys/csp/user/fhirUI
+COPY fhirUI /usr/irissys/csp/user/fhirUI
 
 # run iris and initial 
 RUN iris start IRIS \

@@ -1,3 +1,7 @@
+# Harbor
+
+docker tag iris-fhir-portal-iris:latest harbor.443916233c2349241f52.kpnappfactory.nl/hex/fhir-portal:v0.1.1
+
 # IRIS FHIR Portal
 The goal is to show how easy we can create a Patient Chart using FHIR capabilities in IRIS For Health and also empower the user with their own data.
 

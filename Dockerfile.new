@@ -1,0 +1,21 @@
+ARG IMAGE=containers.intersystems.com/intersystems/irishealth:2023.3
+FROM $IMAGE as builder
+
+WORKDIR /tmp
+
+RUN --mount=type=bind,src=.,dst=. \
+	iris start IRIS \
+	&& iris session IRIS < /tmp/iris.script \
+	&& iris stop IRIS quietly
+
+FROM $IMAGE as final
+
+ADD ./copy-data.py ./
+RUN --mount=type=bind,source=/,target=/builder,from=builder \
+    cp -f /builder/usr/irissys/iris.cpf /usr/irissys/iris.cpf \
+    && python3 copy-data.py -c /usr/irissys/iris.cpf -d /builder/ --python \
+    && rm copy-data.py
+
+WORKDIR /home/irisowner
+
+COPY fhirUI /usr/irissys/csp/user/fhirUI
